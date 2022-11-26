@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Expert = ({expert}) => {
-  console.log(expert)
+  // console.log(expert)
   const {img , name} = expert ;
   return (
     <div className="col">

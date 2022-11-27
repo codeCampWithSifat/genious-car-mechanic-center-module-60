@@ -5,6 +5,9 @@ import "./Register.css";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import { useUpdateProfile } from "react-firebase-hooks/auth";
+import Loading from "../../Shared/Loading/Loading";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
@@ -25,17 +28,17 @@ const Register = () => {
     );
   }
   if (loading) {
-    return <p>Loading...</p>;
+    return <Loading />;
   }
   if (user) {
     // navigate(from, { replace: true });
-    console.log(user)
+    console.log(user);
   }
   if (updating) {
     return <p>Updating...</p>;
   }
 
-  const handleRegistrationForm = async(e) => {
+  const handleRegistrationForm = async (e) => {
     e.preventDefault();
 
     const name = e.target.name.value;
@@ -52,8 +55,8 @@ const Register = () => {
     // console.log(name, email, password, confirmPasword);
     await createUserWithEmailAndPassword(email, password);
     await updateProfile({ displayName: name });
-    console.log("Updated Your Profile Succesfully");
-    navigate("/home")
+    toast("Check Your Email Or Spam Box To Verify Your Email");
+    navigate("/home");
   };
   return (
     <div className="container register_form">
@@ -121,6 +124,7 @@ const Register = () => {
           </Link>
         </p>
         <SocialLogin />
+        <ToastContainer />
       </form>
     </div>
   );

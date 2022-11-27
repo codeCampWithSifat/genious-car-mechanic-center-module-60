@@ -1,4 +1,4 @@
-.register_form  input {
+.register_form  input:not([type=checkbox]) {
    display: block;
    margin: 1rem auto;
    height: 50px;

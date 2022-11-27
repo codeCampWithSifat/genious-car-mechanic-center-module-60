@@ -1,41 +1,59 @@
-import React from "react";
-import { Link , useLocation, useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import "./Register.css";
 import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import SocialLogin from "../SocialLogin/SocialLogin";
+import { useUpdateProfile } from "react-firebase-hooks/auth";
 
 const Register = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || "/checkout"
-    if (error) {
-      return (
-        <div>
-          <p>Error: {error.message}</p>
-        </div>
-      );
-    }
-    if (loading) {
-      return <p>Loading...</p>;
-    }
-    if (user) {
-      navigate(from, { replace: true });
-    }
+    useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+  const [updateProfile, updating, error2] = useUpdateProfile(auth);
 
-  const handleRegistrationForm = (e) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/checkout";
+  const [agreed, setAgreed] = useState(false);
+  if (error) {
+    return (
+      <div>
+        <p>
+          Error: {error?.message} {error2?.message}
+        </p>
+      </div>
+    );
+  }
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (user) {
+    // navigate(from, { replace: true });
+    console.log(user)
+  }
+  if (updating) {
+    return <p>Updating...</p>;
+  }
+
+  const handleRegistrationForm = async(e) => {
     e.preventDefault();
 
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+    // const agree = e.target.terms.checked;
+    // if (agreed) {
+    //   createUserWithEmailAndPassword(email, password);
+    // }
     // const confirmPasword = e.target.confirmPassword.value;
     // if (password !== confirmPasword) {
     //  error("Password Not Matched");
     // }
     // console.log(name, email, password, confirmPasword);
-    createUserWithEmailAndPassword(email, password)
+    await createUserWithEmailAndPassword(email, password);
+    await updateProfile({ displayName: name });
+    console.log("Updated Your Profile Succesfully");
+    navigate("/home")
   };
   return (
     <div className="container register_form">
@@ -45,7 +63,7 @@ const Register = () => {
       >
         Register Your Account Kindly
       </h2>
-      <form onSubmit={handleRegistrationForm}>
+      <form onSubmit={handleRegistrationForm} className="w-50 mx-auto">
         <input
           type="text"
           name="name"
@@ -74,14 +92,36 @@ const Register = () => {
           placeholder="Enter Your Confirm Password"
           required
         /> */}
-        <input type="submit" value="Register" />
+        <input
+          onClick={() => setAgreed(!agreed)}
+          type="checkbox"
+          name="terms"
+          id="terms"
+        />
+        <label
+          htmlFor="terms"
+          className={
+            agreed
+              ? "text-primary text-center ms-2 "
+              : "text-danger text-center ms-2 "
+          }
+        >
+          Accept Our Terms And Conditions
+        </label>
+        <input
+          disabled={!agreed}
+          type="submit"
+          value="Register"
+          className="d-block btn btn-primary text-white"
+        />
+        <p className="text-center mt-2 ">
+          Already Register{" "}
+          <Link to="/login" className="text-decoration-none text-danger">
+            Please Login
+          </Link>
+        </p>
+        <SocialLogin />
       </form>
-      <p className="text-center mt-3 ">
-        Already Register{" "}
-        <Link to="/login" className="text-decoration-none text-danger">
-          Please Login
-        </Link>
-      </p>
     </div>
   );
 };

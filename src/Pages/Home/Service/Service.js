@@ -20,7 +20,7 @@ const Service = ({ service }) => {
         <p style={{ textAlign: "justify" }}>
           <small>{description}</small>
         </p>
-        <button onClick={() => navigateToServiceDetail(id)}>Book {name}</button>
+        <button className="btn btn-info " onClick={() => navigateToServiceDetail(id)}>Book {name.toUpperCase()}</button>
       </div>
     </div>
   );

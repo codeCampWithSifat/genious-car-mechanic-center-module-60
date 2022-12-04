@@ -4,12 +4,12 @@ import "./Service.css";
 
 const Service = ({ service }) => {
   // console.log(service);
-  const {id, name, img, price, description } = service;
-  const navigate = useNavigate()
+  const { _id, name, img, price, description } = service;
+  const navigate = useNavigate();
 
-  const navigateToServiceDetail = id => {
-      navigate(`/service/${id}`)
-  }
+  const navigateToServiceDetail = (id) => {
+    navigate(`/service/${id}`);
+  };
 
   return (
     <div className="service">
@@ -20,7 +20,12 @@ const Service = ({ service }) => {
         <p style={{ textAlign: "justify" }}>
           <small>{description}</small>
         </p>
-        <button className="btn btn-info " onClick={() => navigateToServiceDetail(id)}>Book {name.toUpperCase()}</button>
+        <button
+          className="btn btn-info "
+          onClick={() => navigateToServiceDetail(_id)}
+        >
+          Book {name.toUpperCase()}
+        </button>
       </div>
     </div>
   );

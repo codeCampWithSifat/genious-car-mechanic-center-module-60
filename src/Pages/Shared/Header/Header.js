@@ -19,7 +19,7 @@ const Header = () => {
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" fixed="top">
       <Container>
         <Navbar.Brand as={Link} to="/">
-          React-Bootstrap
+          <span className="text-primary">Genious-Car</span>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
@@ -34,6 +34,9 @@ const Header = () => {
             </Nav.Link>
             <Nav.Link as={Link} to="/manage" className="m-3">
               Manage Service
+            </Nav.Link>
+            <Nav.Link as={Link} to="/orders" className="m-3">
+              Orders
             </Nav.Link>
            </>}
             {!user ? <Nav.Link as={Link} to="/login" className="m-3">
